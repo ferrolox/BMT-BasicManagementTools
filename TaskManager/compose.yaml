@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: taskmanager-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: taskmanager
+      POSTGRES_USER: taskmanager_user
+      POSTGRES_PASSWORD: taskmanager_password
+    volumes:
+      - taskmanager_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taskmanager_user -d taskmanager"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  taskmanager_data:
